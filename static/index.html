@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Kerala House Stay — Hyderabad</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <!-- Top search bar (mimicking the booking site header) -->
+  <header class="topbar">
+    <div class="searchbar">
+      <div class="search-field">
+        <div class="label">Where</div>
+        <div class="value muted">Search destinations</div>
+      </div>
+      <div class="divider"></div>
+      <div class="search-field">
+        <div class="label">When</div>
+        <div class="value muted">Add dates</div>
+      </div>
+      <div class="divider"></div>
+      <div class="search-field">
+        <div class="label">Who</div>
+        <div class="value muted">Add guests</div>
+      </div>
+      <button class="filter-btn" aria-label="Filters">⚙</button>
+      <button class="search-btn" aria-label="Search">🔍</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- Left column: property details -->
+    <section class="property">
+      <!-- Hero image -->
+      <div class="hero">
+        <img
+          src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70"
+          alt="Property hero"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- Title block -->
+      <h1 class="title">The Kerala House Stay</h1>
+      <div class="location">
+        <span class="pin">📍</span><span>Hyderabad</span>
+      </div>
+
+      <div class="stats">
+        <span class="stat"><span class="stat-icon">🛏️</span> 2 Bedrooms</span>
+        <span class="stat"><span class="stat-icon">👥</span> 18 Guests</span>
+        <span class="stat"><span class="stat-icon">🛁</span> 3 Bathrooms</span>
+      </div>
+
+      <!-- Tab bar -->
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="stay">Stay</button>
+        <button class="tab" data-tab="location">Location</button>
+        <button class="tab" data-tab="food">Food</button>
+        <button class="tab" data-tab="liquor">Liquor</button>
+        <button class="tab" data-tab="amenities">Amenities</button>
+        <button class="tab" data-tab="rules">Home Rules</button>
+        <button class="tab" data-tab="reviews">Reviews</button>
+        <button class="tab tab-ai" data-tab="ai">
+          <span class="sparkle">✨</span> AI
+        </button>
+      </nav>
+
+      <!-- Tab panels -->
+      <div class="panels">
+        <section class="panel active" data-panel="stay">
+          <h2>About Stay</h2>
+          <p>
+            Kerala House Stay – Moinabad. A nature-inspired farmhouse with pool,
+            lawns &amp; traditional charm — perfect for family gatherings, weekend
+            getaways, and festive celebrations.
+          </p>
+          <h3>Stay details</h3>
+          <p class="muted">Duration: 10 May 2026 – 11 May 2026</p>
+          <h3>Stay timings</h3>
+          <div class="timings">
+            <div><strong>Check in</strong><br />Sun 10 May, 2:00 PM</div>
+            <div><strong>Check out</strong><br />Mon 11 May, 12:00 PM</div>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="location">
+          <h2>Location</h2>
+          <p class="muted">Moinabad, Hyderabad. ~45 min from Hitech City.</p>
+        </section>
+
+        <section class="panel" data-panel="food">
+          <h2>Food</h2>
+          <p class="muted">In-house chef on request. Authentic Kerala cuisine available.</p>
+        </section>
+
+        <section class="panel" data-panel="liquor">
+          <h2>Liquor</h2>
+          <p class="muted">BYOB allowed. No on-site bar.</p>
+        </section>
+
+        <section class="panel" data-panel="amenities">
+          <h2>Amenities</h2>
+          <ul class="amenities">
+            <li>🏊 Private Pool</li>
+            <li>🌳 Lawn / Garden</li>
+            <li>📺 Smart TV</li>
+            <li>❄ AC</li>
+            <li>🔥 BBQ</li>
+            <li>🎶 Bluetooth Speakers</li>
+            <li>🚗 Parking</li>
+            <li>📶 Wi-Fi</li>
+          </ul>
+        </section>
+
+        <section class="panel" data-panel="rules">
+          <h2>Home Rules</h2>
+          <ul>
+            <li>No smoking indoors</li>
+            <li>Loud music until 11 PM</li>
+            <li>No unregistered guests</li>
+          </ul>
+        </section>
+
+        <section class="panel" data-panel="reviews">
+          <h2>Reviews</h2>
+          <p class="muted">★ 4.7 · 128 reviews</p>
+        </section>
+
+        <!-- AI panel: the new bit -->
+        <section class="panel" data-panel="ai">
+          <div class="ai-header">
+            <h2>
+              <span class="sparkle">✨</span> Imagine your stay
+            </h2>
+            <p class="muted">
+              See AI-generated visuals of how this exact property looks with
+              people enjoying it. Pick a scene below or describe your own.
+            </p>
+          </div>
+
+          <h3>Suggested scenes</h3>
+          <div class="suggestions" id="suggestions">
+            <!-- Populated by app.js -->
+          </div>
+
+          <h3>Try your own</h3>
+          <div class="chat" id="chat">
+            <div class="msg msg-bot">
+              <div class="bubble">
+                Hi! Tell me how you'd like to picture your stay — for example
+                "12 of us hanging by the pool" or "movie night in the living
+                room".
+              </div>
+            </div>
+          </div>
+
+          <form class="composer" id="composer" autocomplete="off">
+            <input
+              id="prompt-input"
+              type="text"
+              placeholder="Describe a scene… (e.g. friends having dinner outside)"
+              maxlength="200"
+            />
+            <button type="submit" id="send-btn">Send</button>
+          </form>
+
+          <p class="ai-disclaimer muted">
+            AI-generated. People shown are not real. For visualization only.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <!-- Right column: booking widget -->
+    <aside class="booking">
+      <h3 class="accent">Add ons</h3>
+      <h3 class="accent">Price</h3>
+      <div class="price-row"><span>1 Night</span><span>₹10999</span></div>
+      <div class="price-row total">
+        <span class="accent">Total Amount</span><span class="accent">₹10999</span>
+      </div>
+      <p class="muted small">No hidden charges as promised!</p>
+      <div class="price-row"><strong>Pay now</strong><span>₹2199</span></div>
+      <div class="price-row"><strong>Pay later at the venue</strong><span>₹8800</span></div>
+      <button class="coupons">🏷 Coupons</button>
+      <button class="cta">Confirm and Pay ₹2200</button>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
