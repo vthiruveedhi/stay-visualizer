@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <!-- Top search bar (mimicking the booking site header) -->
+  <!-- Top search bar -->
   <header class="topbar">
     <div class="searchbar">
       <div class="search-field">
@@ -30,163 +30,252 @@
   </header>
 
   <main class="page">
-    <!-- Left column: property details -->
-    <section class="property">
-      <!-- Hero image -->
-      <div class="hero">
+    <!-- ============ PHOTO GALLERY ============ -->
+    <section class="gallery">
+      <div class="gallery-hero">
         <img
           src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70"
-          alt="Property hero"
-          loading="lazy"
+          alt="Property hero" loading="lazy"
         />
+        <button class="gallery-play" aria-label="Play video">▶</button>
+        <div class="gallery-actions">
+          <button class="round-btn" aria-label="Share">↗</button>
+          <button class="round-btn" aria-label="Save">♡</button>
+        </div>
       </div>
-
-      <!-- Title block -->
-      <h1 class="title">The Kerala House Stay</h1>
-      <div class="location">
-        <span class="pin">📍</span><span>Hyderabad</span>
-      </div>
-
-      <div class="stats">
-        <span class="stat"><span class="stat-icon">🛏️</span> 2 Bedrooms</span>
-        <span class="stat"><span class="stat-icon">👥</span> 18 Guests</span>
-        <span class="stat"><span class="stat-icon">🛁</span> 3 Bathrooms</span>
-      </div>
-
-      <!-- Tab bar -->
-      <nav class="tabs" id="tabs">
-        <button class="tab active" data-tab="stay">Stay</button>
-        <button class="tab" data-tab="location">Location</button>
-        <button class="tab" data-tab="food">Food</button>
-        <button class="tab" data-tab="liquor">Liquor</button>
-        <button class="tab" data-tab="amenities">Amenities</button>
-        <button class="tab" data-tab="rules">Home Rules</button>
-        <button class="tab" data-tab="reviews">Reviews</button>
-        <button class="tab tab-ai" data-tab="ai">
-          <span class="sparkle">✨</span> AI
-        </button>
-      </nav>
-
-      <!-- Tab panels -->
-      <div class="panels">
-        <section class="panel active" data-panel="stay">
-          <h2>About Stay</h2>
-          <p>
-            Kerala House Stay – Moinabad. A nature-inspired farmhouse with pool,
-            lawns &amp; traditional charm — perfect for family gatherings, weekend
-            getaways, and festive celebrations.
-          </p>
-          <h3>Stay details</h3>
-          <p class="muted">Duration: 10 May 2026 – 11 May 2026</p>
-          <h3>Stay timings</h3>
-          <div class="timings">
-            <div><strong>Check in</strong><br />Sun 10 May, 2:00 PM</div>
-            <div><strong>Check out</strong><br />Mon 11 May, 12:00 PM</div>
-          </div>
-        </section>
-
-        <section class="panel" data-panel="location">
-          <h2>Location</h2>
-          <p class="muted">Moinabad, Hyderabad. ~45 min from Hitech City.</p>
-        </section>
-
-        <section class="panel" data-panel="food">
-          <h2>Food</h2>
-          <p class="muted">In-house chef on request. Authentic Kerala cuisine available.</p>
-        </section>
-
-        <section class="panel" data-panel="liquor">
-          <h2>Liquor</h2>
-          <p class="muted">BYOB allowed. No on-site bar.</p>
-        </section>
-
-        <section class="panel" data-panel="amenities">
-          <h2>Amenities</h2>
-          <ul class="amenities">
-            <li>🏊 Private Pool</li>
-            <li>🌳 Lawn / Garden</li>
-            <li>📺 Smart TV</li>
-            <li>❄ AC</li>
-            <li>🔥 BBQ</li>
-            <li>🎶 Bluetooth Speakers</li>
-            <li>🚗 Parking</li>
-            <li>📶 Wi-Fi</li>
-          </ul>
-        </section>
-
-        <section class="panel" data-panel="rules">
-          <h2>Home Rules</h2>
-          <ul>
-            <li>No smoking indoors</li>
-            <li>Loud music until 11 PM</li>
-            <li>No unregistered guests</li>
-          </ul>
-        </section>
-
-        <section class="panel" data-panel="reviews">
-          <h2>Reviews</h2>
-          <p class="muted">★ 4.7 · 128 reviews</p>
-        </section>
-
-        <!-- AI panel: the new bit -->
-        <section class="panel" data-panel="ai">
-          <div class="ai-header">
-            <h2>
-              <span class="sparkle">✨</span> Imagine your stay
-            </h2>
-            <p class="muted">
-              See AI-generated visuals of how this exact property looks with
-              people enjoying it. Pick a scene below or describe your own.
-            </p>
-          </div>
-
-          <h3>Suggested scenes</h3>
-          <div class="suggestions" id="suggestions">
-            <!-- Populated by app.js -->
-          </div>
-
-          <h3>Try your own</h3>
-          <div class="chat" id="chat">
-            <div class="msg msg-bot">
-              <div class="bubble">
-                Hi! Tell me how you'd like to picture your stay — for example
-                "12 of us hanging by the pool" or "movie night in the living
-                room".
-              </div>
-            </div>
-          </div>
-
-          <form class="composer" id="composer" autocomplete="off">
-            <input
-              id="prompt-input"
-              type="text"
-              placeholder="Describe a scene… (e.g. friends having dinner outside)"
-              maxlength="200"
-            />
-            <button type="submit" id="send-btn">Send</button>
-          </form>
-
-          <p class="ai-disclaimer muted">
-            AI-generated. People shown are not real. For visualization only.
-          </p>
-        </section>
+      <div class="gallery-grid">
+        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <button class="see-all">📷 See all photos</button>
       </div>
     </section>
 
-    <!-- Right column: booking widget -->
-    <aside class="booking">
-      <h3 class="accent">Add ons</h3>
-      <h3 class="accent">Price</h3>
-      <div class="price-row"><span>1 Night</span><span>₹10999</span></div>
-      <div class="price-row total">
-        <span class="accent">Total Amount</span><span class="accent">₹10999</span>
+    <!-- ============ TWO-COLUMN BODY ============ -->
+    <div class="body-grid">
+      <!-- LEFT: property content -->
+      <div class="content">
+        <h1 class="title">The Kerala House Stay</h1>
+        <div class="location">
+          <span class="pin">📍</span><span>Hyderabad</span>
+        </div>
+        <div class="stats">
+          <span class="stat"><span class="stat-icon">🛏️</span> 2 Bedrooms</span>
+          <span class="stat"><span class="stat-icon">👥</span> 18 Guests</span>
+          <span class="stat"><span class="stat-icon">🛁</span> 3 Bathrooms</span>
+        </div>
+
+        <!-- Tab bar -->
+        <nav class="tabs" id="tabs">
+          <button class="tab active" data-tab="stay">Stay</button>
+          <button class="tab" data-tab="location">Location</button>
+          <button class="tab" data-tab="food">Food</button>
+          <button class="tab" data-tab="liquor">Liquor</button>
+          <button class="tab" data-tab="amenities">Amenities</button>
+          <button class="tab" data-tab="rules">Home Rules</button>
+          <button class="tab" data-tab="reviews">Reviews</button>
+          <button class="tab tab-ai" data-tab="ai"><span class="sparkle">✨</span> AI</button>
+        </nav>
+
+        <div class="panels">
+          <!-- ===== STAY ===== -->
+          <section class="panel active" data-panel="stay">
+            <h2>About Stay</h2>
+            <p>
+              Kerala House Stay – Moinabad. A nature-inspired farmhouse with pool,
+              lawns &amp; traditional charm — perfect for family gatherings,
+              weekend getaways, and festive celebrations.
+            </p>
+            <p>
+              <strong>📍 Location Advantage</strong><br />
+              8–10 mins from Moinabad Town · 25–30 mins from Rajiv Gandhi
+              International Airport · 35–40 mins from Gachibowli &amp; Financial
+              District. Calm countryside location with smooth road connectivity.
+              Ola, Uber &amp; Rapido available nearby.
+            </p>
+            <p>
+              <strong>🍽 Food &amp; Delivery</strong><br />
+              Zomato &amp; Swiggy deliver to this property. In-house chef
+              available on request — authentic Kerala cuisine.
+            </p>
+
+            <h3>Timings</h3>
+            <div class="timings">
+              <div><strong>Check-in</strong><br />2:00 PM</div>
+              <div><strong>Check-out</strong><br />10:00 AM</div>
+            </div>
+
+            <p class="approval">♦ This stay needs owner to approve booking</p>
+
+            <div class="host-card">
+              <div class="host-badge">Verified Host</div>
+              <div class="host-row">
+                <div class="host-avatar">🏠</div>
+                <div>
+                  <div class="host-name">Kerala House</div>
+                  <div class="muted small">Speaks: English, Hindi, Telugu</div>
+                </div>
+              </div>
+            </div>
+
+            <textarea class="msg-host" placeholder="Type a message"></textarea>
+          </section>
+
+          <!-- ===== LOCATION ===== -->
+          <section class="panel" data-panel="location">
+            <h2>Location</h2>
+            <p>This stay is located in <strong>Sriramnagar, Moinabad, Telangana</strong>.</p>
+            <button class="ghost-btn">Enable GPS</button>
+            <div class="map-placeholder">
+              <span>🗺 Map preview</span>
+              <small class="muted">Exact location will be provided after booking</small>
+            </div>
+            <ul class="bullets">
+              <li>Taxi services like Rapido, Ola, and Uber are available at this location.</li>
+              <li>Unmarried couples are not allowed at this property.</li>
+            </ul>
+
+            <h3>Famous places</h3>
+            <ul class="rated-list">
+              <li><span>↗ Serene Exotic Farms</span><span class="rating">★ 5.0</span></li>
+              <li><span>↗ OLIVEE FARMS</span><span class="rating">★ 5.0</span></li>
+              <li><span>↗ Hanuman temple</span><span class="rating">★ 4.5</span></li>
+              <li><span>↗ Sapphire Farmhouse</span><span class="rating">★ 4.4</span></li>
+              <li><span>↗ ARROWS FARMHOUSE</span><span class="rating">★ 4.1</span></li>
+              <li><span>↗ Venkatapur waterfalls</span><span class="rating">★ 3.8</span></li>
+            </ul>
+          </section>
+
+          <!-- ===== FOOD ===== -->
+          <section class="panel" data-panel="food">
+            <h2>Food</h2>
+            <p>Chef is available on this property. Zomato &amp; Swiggy also deliver here.</p>
+            <h3>Nearby restaurants</h3>
+            <ul class="rated-list">
+              <li><span>↗ Friends chicken kabab</span><span class="rating">★ 5.0</span></li>
+              <li><span>↗ RK Sree food court</span><span class="rating">★ 5.0</span></li>
+              <li><span>↗ Sri Srinivasa Hotel</span><span class="rating">★ 4.5</span></li>
+              <li><span>↗ LASANI HOTEL</span><span class="rating">★ 4.4</span></li>
+              <li><span>↗ Mirza Sahab Dhaba</span><span class="rating">★ 4.4</span></li>
+              <li><span>↗ New Indiana hotel</span><span class="rating">★ 4.3</span></li>
+              <li><span>↗ SAI RAM Tiffin Centre</span><span class="rating">★ 4.2</span></li>
+              <li><span>↗ Azeem chicken center</span><span class="rating">★ 4.0</span></li>
+              <li><span>↗ The Green Big Boss house</span><span class="rating">★ 4.0</span></li>
+              <li><span>↗ Gulmohar restaurant</span><span class="rating">★ 3.7</span></li>
+            </ul>
+          </section>
+
+          <!-- ===== LIQUOR ===== -->
+          <section class="panel" data-panel="liquor">
+            <h2>Liquor</h2>
+            <ul class="bullets">
+              <li>Drinking alcohol is allowed on this property.</li>
+              <li>This property does not have Internet TV.</li>
+              <li>This property does not have Music System.</li>
+            </ul>
+          </section>
+
+          <!-- ===== AMENITIES ===== -->
+          <section class="panel" data-panel="amenities">
+            <h2>Amenities</h2>
+            <div class="amenity-chips">
+              <div class="chip">❄ AC</div>
+              <div class="chip">🎵 Music System</div>
+              <div class="chip">🏸 Badminton</div>
+              <div class="chip">🧊 Refrigerator</div>
+              <div class="chip">📺 TV</div>
+              <button class="chip chip-more">See More</button>
+            </div>
+          </section>
+
+          <!-- ===== HOME RULES ===== -->
+          <section class="panel" data-panel="rules">
+            <h2>House Rules</h2>
+            <ul class="bullets">
+              <li>Kindly reach out to us before booking your stay.</li>
+              <li>Strictly no illegal activities are permitted on the property (including drugs, hookah, etc).</li>
+              <li>No loud music after permitted hours (as per local regulations).</li>
+            </ul>
+          </section>
+
+          <!-- ===== REVIEWS ===== -->
+          <section class="panel" data-panel="reviews">
+            <h2>Customers Reviews</h2>
+            <div class="empty-reviews">
+              <div class="empty-graphic">⭐</div>
+              <strong>NO REVIEWS YET</strong>
+            </div>
+          </section>
+
+          <!-- ===== AI (the new bit) ===== -->
+          <section class="panel" data-panel="ai">
+            <div class="ai-header">
+              <h2><span class="sparkle">✨</span> Imagine your stay</h2>
+              <p class="muted">
+                See AI-generated visuals of how this property looks with people
+                enjoying it. Pick a scene below or describe your own.
+              </p>
+            </div>
+
+            <h3>Suggested scenes</h3>
+            <div class="suggestions" id="suggestions"></div>
+
+            <h3>Try your own</h3>
+            <div class="chat" id="chat">
+              <div class="msg msg-bot">
+                <div class="bubble">
+                  Hi! Tell me how you'd like to picture your stay — for example
+                  "12 of us hanging by the pool" or "movie night in the living
+                  room".
+                </div>
+              </div>
+            </div>
+
+            <form class="composer" id="composer" autocomplete="off">
+              <input id="prompt-input" type="text"
+                     placeholder="Describe a scene… (e.g. friends having dinner outside)"
+                     maxlength="200" />
+              <button type="submit" id="send-btn">Send</button>
+            </form>
+
+            <p class="ai-disclaimer muted">
+              AI-generated. People shown are not real. For visualization only.
+            </p>
+          </section>
+        </div>
       </div>
-      <p class="muted small">No hidden charges as promised!</p>
-      <div class="price-row"><strong>Pay now</strong><span>₹2199</span></div>
-      <div class="price-row"><strong>Pay later at the venue</strong><span>₹8800</span></div>
-      <button class="coupons">🏷 Coupons</button>
-      <button class="cta">Confirm and Pay ₹2200</button>
-    </aside>
+
+      <!-- RIGHT: booking card -->
+      <aside class="booking">
+        <div class="price-line">
+          <span class="rs">Rs.</span>
+          <span class="price-num">11,950</span>
+          <span class="per">/night</span>
+        </div>
+        <div class="dates-row">
+          <div class="date-cell">
+            <div class="cell-label">Check In</div>
+            <div class="cell-value">06-05-2026</div>
+          </div>
+          <div class="date-cell">
+            <div class="cell-label">Check Out</div>
+            <div class="cell-value">07-05-2026</div>
+          </div>
+        </div>
+        <div class="guests-row">
+          <span>Guests</span>
+          <div class="counter">
+            <button aria-label="decrement">−</button>
+            <span>18</span>
+            <button aria-label="increment">+</button>
+          </div>
+        </div>
+        <button class="cta">Book Now</button>
+      </aside>
+    </div>
   </main>
 
   <script src="/static/app.js"></script>
