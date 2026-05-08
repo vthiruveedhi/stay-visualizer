@@ -30,12 +30,15 @@
   </header>
 
   <main class="page">
-    <!-- ============ PHOTO GALLERY ============ -->
+    <!-- ============ PHOTO GALLERY ============
+         Each image is tagged with data-scene. The AI tab reads these tags
+         so suggestions like "pool day" use the actual pool photo as the
+         Flux Kontext reference, not a stock photo. -->
     <section class="gallery">
       <div class="gallery-hero">
         <img
           src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70"
-          alt="Property hero" loading="lazy"
+          data-scene="exterior" alt="Property exterior" loading="lazy"
         />
         <button class="gallery-play" aria-label="Play video">▶</button>
         <div class="gallery-actions">
@@ -44,12 +47,18 @@
         </div>
       </div>
       <div class="gallery-grid">
-        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=600&q=70" alt="" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=70"
+             data-scene="pool" alt="Pool" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=70"
+             data-scene="bedroom" alt="Bedroom" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=70"
+             data-scene="hall" alt="Living room" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=70"
+             data-scene="dining" alt="Dining" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=70"
+             data-scene="kitchen" alt="Kitchen" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=600&q=70"
+             data-scene="garden" alt="Garden" loading="lazy" />
         <button class="see-all">📷 See all photos</button>
       </div>
     </section>
@@ -215,13 +224,14 @@
             <div class="ai-header">
               <h2><span class="sparkle">✨</span> Imagine your stay</h2>
               <p class="muted">
-                See AI-generated visuals of how this property looks with people
-                enjoying it. Pick a scene below or describe your own.
+                See AI-generated visuals using <strong>this property's actual
+                photos</strong>. Pick a scene below — we'll use the matching
+                room photo from the gallery — or describe your own.
               </p>
             </div>
 
             <h3>Suggested scenes</h3>
-            <div class="suggestions" id="suggestions"></div>
+            <div class="suggestion-chips" id="suggestions"></div>
 
             <h3>Try your own</h3>
             <div class="chat" id="chat">
