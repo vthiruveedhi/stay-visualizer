@@ -1,17 +1,28 @@
-"""ComfyUI integration.
+"""ComfyUI integration via the upstream multipart wrapper.
 
-Currently stubbed: returns the preset image for the matched scene after a small
-delay. When `settings.comfyui_url` is set, swap `generate_image()` to use
-`generate_via_comfyui()` (skeleton below — finish once the workflow JSON and
-ComfyUI URL are available).
+The upstream `/run` endpoint accepts:
+    multipart/form-data
+        image  (file)   - reference image
+        prompt (text)   - what to render
+
+…and responds with the generated PNG bytes directly.
+
+We:
+  1. Match the user's prompt to a curated scene (safety + decent default).
+  2. Download the property's reference image.
+  3. POST it + the (scene + user) prompt to the upstream.
+  4. Save the returned PNG under static/generated/ so the browser can fetch it.
+  5. Return its public URL to the frontend.
+
+If `COMFYUI_ENDPOINT` is empty, or the upstream call fails, we fall back to
+the mock generator so the demo never breaks during a vendor pitch.
 """
 
 from __future__ import annotations
 
 import asyncio
-import json
+import hashlib
 import logging
-import uuid
 from pathlib import Path
 
 import httpx
@@ -21,52 +32,41 @@ from app.scenes import Scene, match_scene
 
 logger = logging.getLogger("comfy")
 
+# Skip the ngrok-free interstitial warning for programmatic requests.
+_NGROK_SKIP = {"ngrok-skip-browser-warning": "1"}
 
-async def generate_image(prompt: str, guests: int = 4, reference_image: str | None = None) -> dict:
-    """Public entrypoint. Switches to real ComfyUI once configured."""
+
+async def generate_image(
+    prompt: str,
+    guests: int = 4,
+    reference_image: str | None = None,
+) -> dict:
+    """Public entrypoint. Auto-falls-back to mock on failure."""
     scene = match_scene(prompt)
-    if settings.comfyui_url:
+    if settings.comfyui_endpoint:
         try:
             return await generate_via_comfyui(scene, prompt, guests, reference_image)
         except Exception as e:
-            logger.exception("ComfyUI call failed, falling back to mock: %s", e)
+            logger.warning("ComfyUI call failed (%s); falling back to mock", e)
     return await generate_mock(scene, prompt, guests)
 
 
 # ---------------------------------------------------------------------------
-# Mock implementation — used until ComfyUI is wired up.
+# Mock — used when the upstream is unconfigured or unreachable.
 # ---------------------------------------------------------------------------
 
 async def generate_mock(scene: Scene, prompt: str, guests: int) -> dict:
     await asyncio.sleep(settings.mock_delay_seconds)
-    caption = scene.prompt.format(guests=guests)
     return {
         "image_url": scene.image,
-        "caption": caption,
+        "caption": scene.prompt.format(guests=guests),
         "scene_key": scene.key,
         "source": "mock",
     }
 
 
 # ---------------------------------------------------------------------------
-# Real implementation skeleton.
-#
-# ComfyUI's HTTP API:
-#   POST /prompt        { "prompt": <workflow_json>, "client_id": <uuid> }
-#                       → { "prompt_id": "..." }
-#   GET  /history/<id>  → { "<id>": { "outputs": { "<node>": { "images": [...] } } } }
-#   GET  /view?filename=...&subfolder=...&type=output  → PNG bytes
-#
-# Plus a websocket at /ws?clientId=<uuid> for live progress events.
-#
-# Steps below for when the workflow JSON is in `workflows/flux_kontext.json`:
-#   1. Read template, find LoadImage node and replace its `image` input with our
-#      reference image filename. (Upload via POST /upload/image first.)
-#   2. Find the prompt CLIPTextEncode node, replace `text` with our prompt.
-#   3. Replace the KSampler `seed` for variety.
-#   4. POST /prompt with the modified workflow.
-#   5. Poll /history/<prompt_id> until the output node has an image entry.
-#   6. Fetch the PNG via /view, save somewhere, return its public URL.
+# Real call.
 # ---------------------------------------------------------------------------
 
 async def generate_via_comfyui(
@@ -75,60 +75,79 @@ async def generate_via_comfyui(
     guests: int,
     reference_image: str | None,
 ) -> dict:
-    base = settings.comfyui_url.rstrip("/")
-    workflow = _load_workflow()
-    full_prompt = scene.prompt.format(guests=guests) + ". " + prompt
+    ref_url = reference_image or settings.default_reference_image
+    full_prompt = _build_prompt(scene, prompt, guests)
 
-    # TODO: parameterize the workflow JSON. Placeholder names below — replace
-    # with your actual node ids after dropping in workflows/flux_kontext.json.
-    _set_node_input(workflow, node_title="UserPrompt", key="text", value=full_prompt)
-    if reference_image:
-        _set_node_input(workflow, node_title="ReferenceImage", key="image", value=reference_image)
+    cache_key = _hash(ref_url, full_prompt)
+    out_path = settings.generated_dir / f"{cache_key}.png"
 
-    client_id = str(uuid.uuid4())
-    async with httpx.AsyncClient(timeout=120) as client:
-        r = await client.post(f"{base}/prompt", json={"prompt": workflow, "client_id": client_id})
-        r.raise_for_status()
-        prompt_id = r.json()["prompt_id"]
+    if out_path.exists():
+        return {
+            "image_url": f"/static/generated/{out_path.name}",
+            "caption": full_prompt,
+            "scene_key": scene.key,
+            "source": "comfyui-cache",
+        }
 
-        # Poll history. Could be replaced with the websocket for lower latency.
-        for _ in range(120):
-            h = await client.get(f"{base}/history/{prompt_id}")
-            h.raise_for_status()
-            data = h.json().get(prompt_id) or {}
-            if data.get("outputs"):
-                for node_out in data["outputs"].values():
-                    for img in node_out.get("images", []):
-                        url = (
-                            f"{base}/view?filename={img['filename']}"
-                            f"&subfolder={img.get('subfolder', '')}"
-                            f"&type={img.get('type', 'output')}"
-                        )
-                        return {
-                            "image_url": url,
-                            "caption": full_prompt,
-                            "scene_key": scene.key,
-                            "source": "comfyui",
-                        }
-            await asyncio.sleep(1)
+    async with httpx.AsyncClient(timeout=httpx.Timeout(180.0, connect=15.0)) as client:
+        # 1) Pull the reference image.
+        ref = await client.get(ref_url, headers=_NGROK_SKIP)
+        ref.raise_for_status()
+        image_bytes = ref.content
+        content_type = ref.headers.get("content-type", "image/jpeg").split(";")[0].strip()
+        ext = "jpg" if "jpeg" in content_type else content_type.split("/")[-1]
+        filename = f"reference.{ext}"
 
-    raise TimeoutError("ComfyUI did not produce an image within 120s")
-
-
-def _load_workflow() -> dict:
-    path = Path(settings.comfyui_workflow_path)
-    if not path.exists():
-        raise FileNotFoundError(
-            f"workflow JSON not found at {path}. Export from ComfyUI via "
-            f"'Save (API Format)' and drop it in."
+        # 2) POST to the wrapper.
+        files = {"image": (filename, image_bytes, content_type)}
+        data = {"prompt": full_prompt}
+        gen = await client.post(
+            settings.comfyui_endpoint,
+            files=files,
+            data=data,
+            headers=_NGROK_SKIP,
         )
-    return json.loads(path.read_text())
+        gen.raise_for_status()
+
+        out_ctype = gen.headers.get("content-type", "")
+        if not out_ctype.startswith("image/"):
+            # Wrapper sometimes returns JSON errors; surface them clearly.
+            preview = gen.text[:300]
+            raise RuntimeError(f"upstream returned {out_ctype!r}: {preview}")
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(gen.content)
+
+    return {
+        "image_url": f"/static/generated/{out_path.name}",
+        "caption": full_prompt,
+        "scene_key": scene.key,
+        "source": "comfyui",
+    }
 
 
-def _set_node_input(workflow: dict, node_title: str, key: str, value) -> None:
-    """Find a node by its `_meta.title` (set in ComfyUI) and patch one input."""
-    for node in workflow.values():
-        if node.get("_meta", {}).get("title") == node_title:
-            node.setdefault("inputs", {})[key] = value
-            return
-    raise KeyError(f"node titled {node_title!r} not found in workflow")
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+
+def _build_prompt(scene: Scene, user_prompt: str, guests: int) -> str:
+    """Combine the curated scene template with the user's words.
+
+    Always appends 'keep the background same' so Flux Kontext preserves the
+    reference room/scene and only injects the people. Trim duplicates.
+    """
+    scene_text = scene.prompt.format(guests=guests)
+    user_text = user_prompt.strip()
+    parts = [scene_text]
+    if user_text and user_text.lower() not in scene_text.lower():
+        parts.append(user_text)
+    parts.append("keep the background same")
+    return ". ".join(p.rstrip(".") for p in parts) + "."
+
+
+def _hash(*parts: str) -> str:
+    h = hashlib.sha256()
+    for p in parts:
+        h.update(p.encode("utf-8"))
+        h.update(b"\0")
+    return h.hexdigest()[:16]

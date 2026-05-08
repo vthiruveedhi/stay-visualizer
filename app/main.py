@@ -55,6 +55,9 @@ class GenerateRequest(BaseModel):
     property_id: str = "default"
     prompt: str = Field(..., min_length=2, max_length=200)
     guests: int = Field(4, ge=1, le=50)
+    # Optional: the property's hero image URL. Used as the Flux Kontext
+    # reference. When missing, the backend default is used.
+    image_url: str | None = None
 
 
 @app.post("/api/generate")
@@ -62,4 +65,5 @@ async def generate(req: GenerateRequest):
     return await generate_image(
         prompt=req.prompt,
         guests=req.guests,
+        reference_image=req.image_url,
     )

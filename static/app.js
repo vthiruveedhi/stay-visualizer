@@ -87,6 +87,12 @@ function escape(s) {
   })[c]);
 }
 
+function getHeroImageUrl() {
+  // The property's hero photo — used as the Flux Kontext reference image.
+  const img = document.querySelector(".gallery-hero img");
+  return img ? img.src : null;
+}
+
 composer.addEventListener("submit", async (e) => {
   e.preventDefault();
   const prompt = promptInput.value.trim();
@@ -102,7 +108,12 @@ composer.addEventListener("submit", async (e) => {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ property_id: PROPERTY_ID, prompt }),
+      body: JSON.stringify({
+        property_id: PROPERTY_ID,
+        prompt,
+        guests: 12,
+        image_url: getHeroImageUrl(),
+      }),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
