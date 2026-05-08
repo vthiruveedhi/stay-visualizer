@@ -1,7 +1,5 @@
 # Fly.io config for the stay-visualizer demo.
-# `app` is set when we run `fly apps create` — left blank here so the
-# repo doesn't hard-code a name (the actual name is global on fly.io).
-
+app = "stay-visualizer-vt"
 primary_region = "bom"  # Mumbai — closest to Indian vendors / users.
 
 [build]
