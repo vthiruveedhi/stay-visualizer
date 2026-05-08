@@ -131,18 +131,31 @@ async def generate_via_comfyui(
 # ---------------------------------------------------------------------------
 
 def _build_prompt(scene: Scene, user_prompt: str, guests: int) -> str:
-    """Combine the curated scene template with the user's words.
+    """Compose the prompt sent to Flux Kontext.
 
-    Always appends 'keep the background same' so Flux Kontext preserves the
-    reference room/scene and only injects the people. Trim duplicates.
+    Strategy:
+      - Subject = the user's words (or the curated scene template if those
+        are missing). Describes ONLY the people to be added.
+      - No atmosphere/lighting/decoration cues — Flux Kontext will otherwise
+        invent string lights, candles, plants, etc. that aren't in the
+        property photo.
+      - A strict preservation clause is appended that explicitly forbids
+        adding new objects or changing the room.
     """
-    scene_text = scene.prompt.format(guests=guests)
-    user_text = user_prompt.strip()
-    parts = [scene_text]
-    if user_text and user_text.lower() not in scene_text.lower():
-        parts.append(user_text)
-    parts.append("keep the background same")
-    return ". ".join(p.rstrip(".") for p in parts) + "."
+    user_text = user_prompt.strip().rstrip(".")
+    if not user_text:
+        user_text = scene.prompt.format(guests=guests).rstrip(".")
+
+    return (
+        f"Add to the scene: {user_text}. "
+        f"Strict preservation: keep the room exactly as in the reference — "
+        f"the same walls, floor, ceiling, furniture, doors, windows, "
+        f"existing light fixtures, plants, and decor. "
+        f"Do not add string lights, fairy lights, candles, balloons, "
+        f"festoons, extra furniture, or any decoration. "
+        f"Match the original lighting and color tone. "
+        f"Only insert the people described, naturally placed in the scene."
+    )
 
 
 def _hash(*parts: str) -> str:

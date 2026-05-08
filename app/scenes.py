@@ -29,47 +29,54 @@ class Scene:
 # These are credible enough for a vendor pitch; swap in real Flux Kontext
 # outputs once the workflow is connected.
 SCENES: list[Scene] = [
+    # Prompts describe ONLY the people (subject). All atmosphere /
+    # lighting / decoration cues are deliberately omitted — Flux Kontext
+    # will otherwise add string lights, candles, etc. that aren't in the
+    # property photo. The preservation clause appended in
+    # `comfy._build_prompt()` does the heavy lifting.
     Scene(
         key="pool",
         label="Pool day with friends",
-        prompt="{guests} friends laughing by the pool, candid, evening light",
+        prompt="{guests} friends standing in the pool, smiling",
         image="/static/property-images/pool-evening.jpg",
-        keywords=("pool", "swim", "swimming", "splash", "water"),
+        keywords=("pool", "swim", "swimming", "splash"),
     ),
     Scene(
         key="bedroom",
-        label="Cozy in the bedroom",
-        prompt="A couple relaxing on the bed, warm light, magazines and coffee",
+        label="Morning in the bedroom",
+        prompt="A couple sitting on the bed having coffee",
         image="/static/property-images/bedroom.jpg",
-        keywords=("bedroom", "bed", "sleep", "relax", "morning", "coffee"),
+        keywords=("bedroom", "bed", "sleep"),
     ),
     Scene(
         key="hall",
-        label="Movie night in the hall",
-        prompt="A group of friends on the sofa watching a movie, popcorn, dim cozy lighting",
+        label="Hanging out in the hall",
+        prompt="A group of friends sitting on the sofa",
         image="/static/property-images/hall.jpg",
-        keywords=("hall", "living", "sofa", "movie", "tv", "couch", "lounge"),
+        keywords=("hall", "living", "sofa", "movie", "couch", "lounge"),
     ),
     Scene(
         key="dining",
         label="Family dinner",
-        prompt="A family eating dinner around the table, festive, warm light",
+        prompt="A family of {guests} sitting around the dining table eating",
         image="/static/property-images/dining.jpg",
-        keywords=("dining", "dinner", "lunch", "food", "eat", "table", "feast", "kitchen", "cook"),
+        # Note: "table" alone is too generic (matches "patio table" etc.)
+        # so it's intentionally absent.
+        keywords=("dining", "dinner", "lunch", "feast", "eat", "kitchen", "cook"),
     ),
     Scene(
         key="patio",
-        label="Evening on the patio",
-        prompt="Two couples chatting at a small table on the patio, evening, warm overhead lights",
+        label="On the patio",
+        prompt="Two couples sitting at the patio table chatting",
         image="/static/property-images/patio.jpg",
         keywords=("patio", "balcony", "veranda", "terrace"),
     ),
     Scene(
         key="garden",
-        label="Lawn party",
-        prompt="A group celebrating outdoors on the lawn at dusk, fairy lights",
+        label="On the lawn",
+        prompt="A group of {guests} people standing on the lawn",
         image="/static/property-images/garden.jpg",
-        keywords=("lawn", "garden", "outdoor", "outside", "party", "evening", "bbq", "grill", "barbecue"),
+        keywords=("lawn", "garden", "outdoor", "outside", "bbq", "grill", "barbecue"),
     ),
 ]
 
