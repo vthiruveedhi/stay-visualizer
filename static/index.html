@@ -31,14 +31,15 @@
 
   <main class="page">
     <!-- ============ PHOTO GALLERY ============
-         Each image is tagged with data-scene. The AI tab reads these tags
-         so suggestions like "pool day" use the actual pool photo as the
-         Flux Kontext reference, not a stock photo. -->
+         Real property photos for The Kerala House Stay. Each image is
+         tagged with data-scene; the AI tab reads these tags so picking
+         "Pool day" uses the property's actual pool photo as the Flux
+         Kontext reference (not a stock image). -->
     <section class="gallery">
       <div class="gallery-hero">
         <img
-          src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70"
-          data-scene="exterior" alt="Property exterior" loading="lazy"
+          src="/static/property-images/pool-evening.jpg"
+          data-scene="pool" alt="Pool at dusk" loading="lazy"
         />
         <button class="gallery-play" aria-label="Play video">▶</button>
         <div class="gallery-actions">
@@ -47,18 +48,18 @@
         </div>
       </div>
       <div class="gallery-grid">
-        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=70"
-             data-scene="pool" alt="Pool" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=70"
+        <img src="/static/property-images/bedroom.jpg"
              data-scene="bedroom" alt="Bedroom" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=600&q=70"
+        <img src="/static/property-images/hall.jpg"
              data-scene="hall" alt="Living room" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=70"
+        <img src="/static/property-images/dining.jpg"
              data-scene="dining" alt="Dining" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=70"
-             data-scene="kitchen" alt="Kitchen" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=600&q=70"
-             data-scene="garden" alt="Garden" loading="lazy" />
+        <img src="/static/property-images/patio.jpg"
+             data-scene="patio" alt="Patio" loading="lazy" />
+        <img src="/static/property-images/garden.jpg"
+             data-scene="garden" alt="Garden / lawn" loading="lazy" />
+        <img src="/static/property-images/pool-day.jpg"
+             alt="Pool, day" loading="lazy" />
         <button class="see-all">📷 See all photos</button>
       </div>
     </section>

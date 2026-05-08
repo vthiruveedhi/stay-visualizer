@@ -32,54 +32,55 @@ SCENES: list[Scene] = [
     Scene(
         key="pool",
         label="Pool day with friends",
-        prompt="A group of {guests} friends laughing by the pool, golden-hour light, candid",
-        image="https://images.unsplash.com/photo-1530653333484-8e6c1ee8d4ee?auto=format&fit=crop&w=600&q=70",
+        prompt="{guests} friends laughing by the pool, candid, evening light",
+        image="/static/property-images/pool-evening.jpg",
         keywords=("pool", "swim", "swimming", "splash", "water"),
     ),
     Scene(
         key="bedroom",
         label="Cozy in the bedroom",
-        prompt="A couple relaxing on the bed, warm bedside lighting, magazines and coffee",
-        image="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=70",
+        prompt="A couple relaxing on the bed, warm light, magazines and coffee",
+        image="/static/property-images/bedroom.jpg",
         keywords=("bedroom", "bed", "sleep", "relax", "morning", "coffee"),
-    ),
-    Scene(
-        key="dining",
-        label="Family dinner",
-        prompt="A large family eating dinner at a long wooden table, candles, festive food",
-        image="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=70",
-        keywords=("dining", "dinner", "lunch", "food", "eat", "table", "feast"),
     ),
     Scene(
         key="hall",
         label="Movie night in the hall",
-        prompt="A group of friends on a sofa watching a movie, popcorn, dim cozy lighting",
-        image="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=600&q=70",
+        prompt="A group of friends on the sofa watching a movie, popcorn, dim cozy lighting",
+        image="/static/property-images/hall.jpg",
         keywords=("hall", "living", "sofa", "movie", "tv", "couch", "lounge"),
+    ),
+    Scene(
+        key="dining",
+        label="Family dinner",
+        prompt="A family eating dinner around the table, festive, warm light",
+        image="/static/property-images/dining.jpg",
+        keywords=("dining", "dinner", "lunch", "food", "eat", "table", "feast", "kitchen", "cook"),
+    ),
+    Scene(
+        key="patio",
+        label="Evening on the patio",
+        prompt="Two couples chatting at a small table on the patio, evening, warm overhead lights",
+        image="/static/property-images/patio.jpg",
+        keywords=("patio", "balcony", "veranda", "terrace"),
     ),
     Scene(
         key="garden",
         label="Lawn party",
-        prompt="A group celebrating outdoors on a green lawn, fairy lights, evening",
-        image="https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=600&q=70",
-        keywords=("lawn", "garden", "outdoor", "outside", "party", "evening"),
-    ),
-    Scene(
-        key="bbq",
-        label="BBQ night",
-        prompt="Friends grilling at a BBQ, smoke rising, drinks in hand, warm dusk light",
-        image="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=70",
-        keywords=("bbq", "grill", "barbecue", "cook"),
+        prompt="A group celebrating outdoors on the lawn at dusk, fairy lights",
+        image="/static/property-images/garden.jpg",
+        keywords=("lawn", "garden", "outdoor", "outside", "party", "evening", "bbq", "grill", "barbecue"),
     ),
 ]
 
 
-# Generic fallback when nothing matches.
+# Generic fallback when nothing matches. Reuses the hero (pool) image so the
+# Flux Kontext reference is always a real property photo.
 _FALLBACK = Scene(
     key="generic",
     label="People enjoying the stay",
     prompt="A happy group of {guests} people enjoying their stay, warm lighting, candid",
-    image="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=70",
+    image="/static/property-images/pool-evening.jpg",
     keywords=(),
 )
 

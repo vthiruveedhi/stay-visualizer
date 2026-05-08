@@ -28,28 +28,28 @@ const sendBtn = document.getElementById("send-btn");
 // using the property's actual photo of that room.
 const SUGGESTIONS = [
   { scene: "pool",     emoji: "🏊", label: "Pool day with friends",
-    prompt: "12 friends laughing by the pool, candid, golden-hour" },
+    prompt: "12 friends laughing by the pool" },
   { scene: "bedroom",  emoji: "🛏",  label: "Lazy morning in the bedroom",
-    prompt: "a couple having morning coffee in bed, warm light" },
+    prompt: "a couple having morning coffee in bed" },
   { scene: "hall",     emoji: "🛋",  label: "Movie night in the hall",
-    prompt: "friends on a sofa watching a movie, popcorn, dim cozy lighting" },
+    prompt: "friends on the sofa watching a movie, popcorn" },
   { scene: "dining",   emoji: "🍽",  label: "Family dinner",
-    prompt: "a family eating dinner at a long wooden table, festive" },
-  { scene: "kitchen",  emoji: "🍳",  label: "Cooking together",
-    prompt: "two friends cooking together in the kitchen, candid" },
+    prompt: "a family eating dinner around the table, festive" },
+  { scene: "patio",    emoji: "🪑", label: "Evening on the patio",
+    prompt: "two couples chatting at a small table on the patio, evening" },
   { scene: "garden",   emoji: "🌳",  label: "Lawn party at dusk",
-    prompt: "a group celebrating outdoors on a lawn at dusk, fairy lights" },
+    prompt: "a group celebrating outdoors on the lawn at dusk, fairy lights" },
 ];
 
 // Free-text prompts get matched to a scene by keyword so we still pick a
-// room-specific reference image. Falls back to the hero (exterior) when
+// room-specific reference image. Falls back to the hero (pool) when
 // nothing matches.
 const SCENE_KEYWORDS = {
   pool:    ["pool", "swim", "splash", "water"],
   bedroom: ["bedroom", "bed", "sleep", "morning", "coffee in bed"],
   hall:    ["hall", "living", "sofa", "couch", "movie", "tv", "lounge"],
-  dining:  ["dining", "dinner", "lunch", "table", "feast", "eat", "food"],
-  kitchen: ["kitchen", "cook", "cooking", "chef"],
+  dining:  ["dining", "dinner", "lunch", "table", "feast", "eat", "food", "kitchen", "cook"],
+  patio:   ["patio", "balcony", "veranda", "terrace"],
   garden:  ["lawn", "garden", "outdoor", "outside", "party", "bbq", "barbecue"],
 };
 
@@ -85,7 +85,7 @@ function matchScene(prompt) {
   for (const [scene, keys] of Object.entries(SCENE_KEYWORDS)) {
     if (keys.some((k) => p.includes(k))) return scene;
   }
-  return "exterior"; // hero is the fallback reference
+  return "pool"; // hero is the fallback reference
 }
 
 // ---------------------------------------------------------------------------
