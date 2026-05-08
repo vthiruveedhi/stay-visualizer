@@ -1,0 +1,22 @@
+# Fly.io config for the stay-visualizer demo.
+# `app` is set when we run `fly apps create` — left blank here so the
+# repo doesn't hard-code a name (the actual name is global on fly.io).
+
+primary_region = "bom"  # Mumbai — closest to Indian vendors / users.
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"   # suspend when idle to save free-tier credits
+  auto_start_machines = true    # auto-resume on next request (~3s cold start)
+  min_machines_running = 0
+  processes = ["app"]
+
+# A single tiny machine is plenty — this app does no heavy work itself
+# (ComfyUI runs elsewhere; we just orchestrate the multipart call).
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
